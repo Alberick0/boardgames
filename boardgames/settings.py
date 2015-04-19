@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     # my apps
     'main',
     'tictactoe',
+    'user',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -110,4 +111,4 @@ STATICFILES_DIRS = (
 
 LOGIN_URL = 'boardgames_login'
 LOGOUT_URL = 'boardgames_logout'
-LOGIN_REDIRECT_URL = 'boardgames_home'
+LOGIN_REDIRECT_URL = 'user_home'
