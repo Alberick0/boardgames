@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
 {% block title %}
     TicTacToe game: {{ game.first_player }} vs {{ game.second_player }}
 {% endblock %}
 
 {% block styling %}
+    {{ block.super }}
 
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+
+    <style type="text/css">
+        .tictactoe-cell {
+            background-color: #debb27;
+        }
+        #last-move {
+            background-color:  #DF6E1E;
+        }
+    </style>
 
 {% endblock %}
 
