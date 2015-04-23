@@ -18,4 +18,19 @@
 
         {% include 'tictactoe/game_list_snippet.html' with header='Finished games' games_list=finished_games %}
     </div>
+
+    <div class="well col-sm-4 col-sm-push-1">
+        {% if invitations %}
+            <h3 class="panel-header">Open Invitations</h3>
+            <div class="list-group">
+                {% for invi in invitations %}
+                    <a class="list-group-item" href="#">
+                        Invitation from {{ invi.from_user.username }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    
+        <a href="{% url 'tictactoe:invite' %}">Invite a user to a game</a>
+    </div>
 {% endblock %}
