@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    TicTacToe game: {{ game.first_player }} vs {{ game.second_player }}
+{% endblock %}
+
+{% block styling %}
+
+
+{% endblock %}
+
+{% block content %}
+    <h3>Game: {{ game }}</h3>
+    <div class="col-sm-9">
+        <table class="table table-bordered" style="width: 60px; border-width: 2px;">
+            {% for line in game.as_board %}
+                <tr>
+                    {% for square in line %}
+                        <td class="tictactoe-cell" style="width: 20px; height: 20px">
+                            {{ square }}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

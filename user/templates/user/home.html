@@ -24,7 +24,8 @@
             <h3 class="panel-header">Open Invitations</h3>
             <div class="list-group">
                 {% for invi in invitations %}
-                    <a class="list-group-item" href="#">
+                    <a class="list-group-item"
+                       href="{% url 'tictactoe:invitation' pk=invi.id %}">
                         Invitation from {{ invi.from_user.username }}
                     </a>
                 {% endfor %}

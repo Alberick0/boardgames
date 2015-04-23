@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -21,6 +22,13 @@ class GamesManager(models.Manager):  # Custom manager class, which represents th
             Q(first_player_id=user.id) | Q(second_player_id=user.id)
         )  # this query returns all games where the user is either 1stP or 2ndP
 
+    def new_game(self, invitation):
+        game = Game(first_player=invitation.to_user,
+                    second_player=invitation.from_user,
+                    next_to_move=invitation.to_user)
+
+        return game
+
 
 class Game(models.Model):
     first_player = models.ForeignKey(User, related_name='games_first_player')
@@ -33,6 +41,9 @@ class Game(models.Model):
 
     def __str__(self):
         return '{} vs {}'.format(self.first_player, self.second_player)
+
+    def get_absolute_url(self):
+        return reverse('', args=[self.id])
 
 
 class Move(models.Model):

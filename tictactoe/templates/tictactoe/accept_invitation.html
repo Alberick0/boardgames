@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Invitation from {{ invitation.from_user.username }}
+{% endblock %}
+
+{% block content %}
+    <div class="well col-sd-6">
+        <h3>User {{ invitation.from_user }} invites you to a game.</h3>
+
+        {% if invitation.message %}
+            <h4>Message:</h4>
+            <blockquote><p>{{ invitation.message }}</p></blockquote>
+        {% endif %}
+
+        <form method="post" action="">
+            {% csrf_token %}
+            <button type="submit" name="accept" value="ok">Accept</button>
+            <button type="submit" name="deny" value="no">Deny</button>
+        </form>
+    </div>
+
+{% endblock %}
