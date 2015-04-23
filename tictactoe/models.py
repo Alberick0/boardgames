@@ -11,6 +11,10 @@ STATUS_CHOICES = (
     ('D', 'Draw'),
 )
 
+FIRST_PLAYER_MOVE = 'X'
+SECOND_PLAYER_MOVE = 'O'
+BOARD_SIZE = 3
+
 
 class GamesManager(models.Manager):  # Custom manager class, which represents the whole table
     def games_for_user(self, user):
@@ -45,15 +49,45 @@ class Game(models.Model):
     def get_absolute_url(self):
         return reverse('', args=[self.id])
 
+    def last_move(self):
+        return self.move_set.latest()  # latest is defined by django it will use the get_latest_by field
+
+    def as_board(self):
+        """
+        Return a representation of the game board as two-dimensional list,
+        so you can ask for the state of a square position [y][x].
+
+        It will contain a list of lines, where every line is a list of 'X', 'O' or ''.
+        For example a 3x3 board position:
+
+        [['', 'X', ''],
+         ['O', '', ''],
+         ['X', '', '']]
+        """
+
+        board = [['' for x in range(BOARD_SIZE)] for y in range(BOARD_SIZE)]
+        for move in self.move_set.all():
+            board[move.y][move.x] = FIRST_PLAYER_MOVE if move.by_first_player else SECOND_PLAYER_MOVE
+
+        return board
+
 
 class Move(models.Model):
     x = models.IntegerField()
     y = models.IntegerField()
     comment = models.CharField(max_length=150)
     game = models.ForeignKey(Game)
+    by_first_player = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return 'Next to move is {}'.format(self.game.next_to_move)
+
+    class Meta:  # Can be used to add extra options
+        get_latest_by = 'timestamp' # tells django what field to look to determinate the latest move
+
+    def player(self):
+        return self.game.first_player if self.by_first_player else self.game.second_player
 
 
 class Invitation(models.Model):
