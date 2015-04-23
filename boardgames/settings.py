@@ -42,6 +42,9 @@ INSTALLED_APPS = (
     'main',
     'tictactoe',
     'user',
+
+    # third party
+    'crispy_forms',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -112,3 +115,5 @@ STATICFILES_DIRS = (
 LOGIN_URL = 'boardgames_login'
 LOGOUT_URL = 'boardgames_logout'
 LOGIN_REDIRECT_URL = 'user_home'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

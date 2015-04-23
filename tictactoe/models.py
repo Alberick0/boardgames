@@ -43,3 +43,12 @@ class Move(models.Model):
 
     def __str__(self):
         return 'Next to move is {}'.format(self.game.next_to_move)
+
+
+class Invitation(models.Model):
+    from_user = models.ForeignKey(User, related_name='invitations_sent')
+    to_user = models.ForeignKey(User, related_name='invitations_received', verbose_name='User to invite',
+                                help_text='Select the user with who you want to play')
+    message = models.CharField('Optional Message', max_length=200, blank=True,
+                               help_text='Add a friendly message if you want')
+    timestamp = models.DateTimeField(auto_now_add=True)

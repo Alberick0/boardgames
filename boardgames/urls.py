@@ -10,6 +10,9 @@ urlpatterns = [
 
     # my user app
     url(r'^user/', include('user.urls')),
+
+    # my tictactoe app
+    url(r'^tictactoe/', include('tictactoe.urls', namespace='tictactoe'))
 ]
 
 urlpatterns += patterns(
