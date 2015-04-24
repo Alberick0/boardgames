@@ -25,25 +25,33 @@
         <![endif]-->
         <div class="navbar navbar-default navbar-static-top">
             <div class="container">
-                <div class="navbar-header">
+                {% if user.is_authenticated %}
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="{% url 'user_home' %}">Home</a>
+                    </div>
 
-                    <a class="navbar-brand" href="#">Home</a>
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'tictactoe:invite' %}">New Game</a></li>
+                    </ul>
 
-                </div>
-
-                <ul class="nav navbar-nav">
-                    <li><a href="{% url 'tictactoe:invite' %}">New Game</a></li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
-                    {% if user.is_authenticated %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
                         <li><a href="{% url 'boardgames_logout' %}">Logout</a></li>
-                    {% else %}
+                    </ul>
+
+                {% else %}
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="{% url 'boardgames_home' %}">Home</a>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
                         <li><a href="{% url 'boardgames_login' %}">Login</a></li>
-                    {% endif %}
+                    </ul>
+
+                {% endif %}
                 </ul>
             </div>
         </div>
