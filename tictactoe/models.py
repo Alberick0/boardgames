@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 STATUS_CHOICES = (
@@ -76,8 +77,10 @@ class Game(models.Model):
 
 
 class Move(models.Model):
-    x = models.IntegerField()
-    y = models.IntegerField()
+    x = models.IntegerField(validators=[MinValueValidator(0),
+                            MaxValueValidator(BOARD_SIZE-1)])
+    y = models.IntegerField(validators=[MinValueValidator(0),
+                                        MaxValueValidator(BOARD_SIZE-1)])
     comment = models.CharField(max_length=150)
     game = models.ForeignKey(Game)
     by_first_player = models.BooleanField(default=True)
