@@ -44,21 +44,6 @@ class Game(models.Model):
     status = models.CharField(max_length=1, default='A', choices=STATUS_CHOICES)
     objects = GamesManager()  # sets a new manager for this class.
 
-    def __str__(self):
-        return '{} vs {}'.format(self.first_player, self.second_player)
-
-    def get_absolute_url(self):
-        return reverse('', args=[self.id])
-
-    def is_empty(self, x, y):
-        return not self.move_set.filter(x=x, y=y).exists()
-
-    def last_move(self):
-        return self.move_set.latest()  # latest is defined by django it will use the get_latest_by field
-
-    def is_users_move(self, user):
-        return self.status == 'A' and self.next_to_move == user
-
     def as_board(self):
         """
         Return a representation of the game board as two-dimensional list,
@@ -78,12 +63,73 @@ class Game(models.Model):
 
         return board
 
+    def create_move(self):
+        return Move(game=self, by_first_player=(self.next_to_move == self.first_player))
+
+    def update_after_move(self, move):
+        """
+        Change game state after a move was made
+        """
+
+        self.toggle_next_player()
+        self.status = self.get_status(move)
+
+    def get_status(self, last_move):
+        """
+        Return the status the game should have, given the position of the last move.
+        """
+
+        board = self.as_board()
+        x = last_move.x
+        y = last_move.y
+
+        # make this function work even if last move was not saved yet
+        board[y][x] = FIRST_PLAYER_MOVE if last_move.by_first_player else SECOND_PLAYER_MOVE
+
+        # check straight
+        if (board[y][0] == board[y][1] == board[y][2]) or \
+                (board[0][x] == board[1][x] == board[2][x]):
+            return "F" if last_move.by_first_player else "S"
+
+        # check diagonal
+        if (y == x) or (abs(y - x) == 2):
+            if (board[0][0] == board[1][1] == board[2][2]) or \
+                    (board[0][2] == board[1][1] == board[2][0]):
+                return "F" if last_move.by_first_player else "S"
+
+        if self.move_set.count() >= 9:
+            return "D"
+
+        return "A"
+
+    def toggle_next_player(self):
+        if self.next_to_move == self.first_player:
+            self.next_to_move = self.second_player
+
+        else:
+            self.next_to_move = self.first_player
+
+    def is_empty(self, x, y):
+        return not self.move_set.filter(x=x, y=y).exists()
+
+    def last_move(self):
+        return self.move_set.latest()  # latest is defined by django it will use the get_latest_by field
+
+    def get_absolute_url(self):
+        return reverse('tictactoe:detail', args=[self.id])
+
+    def is_users_move(self, user):
+        return self.status == 'A' and self.next_to_move == user
+
+    def __str__(self):
+        return '{} vs {}'.format(self.first_player, self.second_player)
+
 
 class Move(models.Model):
     x = models.IntegerField(validators=[MinValueValidator(0),
-                            MaxValueValidator(BOARD_SIZE-1)])
+                                        MaxValueValidator(BOARD_SIZE - 1)])
     y = models.IntegerField(validators=[MinValueValidator(0),
-                                        MaxValueValidator(BOARD_SIZE-1)])
+                                        MaxValueValidator(BOARD_SIZE - 1)])
     comment = models.CharField(max_length=150)
     game = models.ForeignKey(Game)
     by_first_player = models.BooleanField(default=True)
@@ -93,7 +139,7 @@ class Move(models.Model):
         return 'Next to move is {}'.format(self.game.next_to_move)
 
     class Meta:  # Can be used to add extra options
-        get_latest_by = 'timestamp' # tells django what field to look to determinate the latest move
+        get_latest_by = 'timestamp'  # tells django what field to look to determinate the latest move
 
     def player(self):
         return self.game.first_player if self.by_first_player else self.game.second_player
