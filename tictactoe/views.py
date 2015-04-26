@@ -3,8 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
-from .forms import InvitationForm
-from .models import Invitation, Game
+from .forms import InvitationForm, MoveForm
+from .models import Invitation, Game, Move
 
 
 @login_required()
@@ -64,5 +64,17 @@ def game_do_move(request, pk):
     if not game.is_users_move(request.user):
         raise PermissionDenied
 
-    return render(request, 'tictactoe/game_do_move.html', {'game': game})
+    context = {'game': game}
+
+    if request.method == 'POST':
+        form = MoveForm(data=request.POST, instance=(Move(game=game)))
+        context['form'] = form
+
+        if form.is_valid():
+            return redirect('tictactoe:detail', pk=pk)
+
+    else:
+        context['form'] = MoveForm()
+
+    return render(request, 'tictactoe/game_do_move.html', context)
 
