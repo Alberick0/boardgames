@@ -51,4 +51,18 @@ def accept_invitation(request, pk):
 def game_detail(request, pk):
     game = get_object_or_404(Game, pk=pk)
 
+    if game.is_users_move(request.user):
+        return redirect('tictactoe:move', pk=pk)
+
     return render(request, 'tictactoe/game_detail.html', {'game': game})
+
+
+@login_required()
+def game_do_move(request, pk):
+    game = get_object_or_404(Game, pk=pk)
+
+    if not game.is_users_move(request.user):
+        raise PermissionDenied
+
+    return render(request, 'tictactoe/game_do_move.html', {'game': game})
+

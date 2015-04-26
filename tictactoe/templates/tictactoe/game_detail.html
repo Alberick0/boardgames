@@ -29,13 +29,16 @@
             {% for line in game.as_board %}
                 <tr>
                     {% for square in line %}
-                        <td class="tictactoe-cell" style="width: 20px; height: 20px">
+                        <td class="tictactoe-cell {% if not square %} empty {% endif %} " style="width: 20px; height: 20px">
                             {{ square }}
                         </td>
                     {% endfor %}
                 </tr>
             {% endfor %}
         </table>
+
+    {% block moveform %}{% endblock %}
+
     </div>
 
 {% endblock %}

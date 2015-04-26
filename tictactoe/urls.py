@@ -6,5 +6,6 @@ urlpatterns = (
         'tictactoe.views',
         url(r'^invite$', 'new_invitation', name='invite'),
         url(r'invitation/(?P<pk>\d+)/$', 'accept_invitation', name='invitation'),
-        url(r'game/(?P<pk>\d+)/$', 'game_detail', name='detail')
+        url(r'game/(?P<pk>\d+)/$', 'game_detail', name='detail'),
+        url(r'game/(?P<pk>\d+)/move$', 'game_do_move', name='move')
     ))

@@ -1,0 +1,28 @@
+{% extends 'tictactoe/game_detail.html' %}
+
+{% load staticfiles %}
+
+{% block styling %}
+    {{ block.super }}
+    
+    <style type="text/css">
+        .tictactoe-cell.empty:hover{
+            background-color: #48CA3B;
+            cursor: pointer;
+        }
+    </style>
+
+{% endblock %}
+
+{% block moveform %}
+    {{ block.super }}
+    
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form }}
+
+        <button type="submit">
+            Submit!
+        </button>
+    </form>
+{% endblock %}

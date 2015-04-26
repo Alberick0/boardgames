@@ -52,6 +52,9 @@ class Game(models.Model):
     def last_move(self):
         return self.move_set.latest()  # latest is defined by django it will use the get_latest_by field
 
+    def is_users_move(self, user):
+        return self.status == 'A' and self.next_to_move == user
+
     def as_board(self):
         """
         Return a representation of the game board as two-dimensional list,
