@@ -67,7 +67,7 @@ def game_do_move(request, pk):
     context = {'game': game}
 
     if request.method == 'POST':
-        form = MoveForm(data=request.POST, instance=(Move(game=game)))
+        form = MoveForm(data=request.POST, instance=Move(game=game))
         context['form'] = form
 
         if form.is_valid():

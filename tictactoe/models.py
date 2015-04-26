@@ -50,6 +50,9 @@ class Game(models.Model):
     def get_absolute_url(self):
         return reverse('', args=[self.id])
 
+    def is_empty(self, x, y):
+        return not self.move_set.filter(x=x, y=y).exists()
+
     def last_move(self):
         return self.move_set.latest()  # latest is defined by django it will use the get_latest_by field
 
