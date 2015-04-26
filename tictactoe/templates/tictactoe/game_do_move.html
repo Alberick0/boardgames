@@ -19,9 +19,10 @@
     
     <form method="post" action="">
         {% csrf_token %}
-        {{ form }}
+        {{ form.x.as_hidden }}
+        {{ form.y.as_hidden }}
 
-        <button type="submit">
+        <button class="hidden" type="Submit">
             Submit!
         </button>
     </form>
