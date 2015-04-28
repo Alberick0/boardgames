@@ -36,9 +36,9 @@
                             id="last-move"
                                 {% endif %} >
                             {% if square == 'X' %}
-                                <span class="fa fa-circle-o" style="padding-right:2px;"></span>
-                            {% elif square == 'O' %}
                                 <span class="glyphicon glyphicon-remove"></span>
+                            {% elif square == 'O' %}
+                                <span class="fa fa-circle-o" style="padding-right:2px;"></span>
                             {% else %}
                                 <span><img src="{% static 'empty.png' %}" alt=""/></span>
                             {% endif %}

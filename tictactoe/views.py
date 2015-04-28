@@ -2,9 +2,14 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.views.generic import ListView
 
 from .forms import InvitationForm, MoveForm
 from .models import Invitation, Game, Move
+
+
+class AllGamesList(ListView):
+    model = Game
 
 
 @login_required()
@@ -73,6 +78,7 @@ def game_do_move(request, pk):
         if form.is_valid():
             move = form.save()
             game.update_after_move(move)
+            game.save()
             return redirect('tictactoe:detail', pk=pk)
 
     else:
