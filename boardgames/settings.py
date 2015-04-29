@@ -10,6 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+
+def show_toolbar(self):
+    return True
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -45,7 +49,7 @@ INSTALLED_APPS = (
 
     # third party
     'crispy_forms',
-    'debug_toolbar',
+    'debug_toolbar'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -118,3 +122,8 @@ LOGOUT_URL = 'boardgames_logout'
 LOGIN_REDIRECT_URL = 'user_home'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TEMPLATE_CONTEXT': True,
+    'SHOW_TOOLBAR_CALLBACK': show_toolbar
+}
