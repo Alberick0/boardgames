@@ -45,6 +45,7 @@ INSTALLED_APPS = (
 
     # third party
     'crispy_forms',
+    'debug_toolbar',
 )
 
 MIDDLEWARE_CLASSES = (
